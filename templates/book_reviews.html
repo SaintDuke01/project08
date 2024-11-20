@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>書評列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .red {
+            color: red;  /* 對於自己的評論設置紅色 */
+        }
+
+        .review-form {
+            margin-top: 20px;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>書評列表</h1>
+
+        <table>
+            <tr>
+                <th>書編號</th>
+                <th>書名</th>
+                <th>書評內容</th>
+                <th>評分</th>
+                <th>操作</th>
+            </tr>
+            {% for review in reviews %}
+            <tr style="color: {{ 'red' if review[5] == current_user.email else 'black' }};">  <!-- 根據作者顯示顏色 -->
+                <td>{{ review[0] }}</td> 
+                <td>{{ review[1] }}</td>  <!-- 書名 -->
+                <td>{{ review[2] }}</td>  <!-- 書評內容 -->
+                <td>{{ review[3] }}</td>  <!-- 評分 -->
+                <td>
+                    {% if review[5] == current_user.email %}  <!-- 檢查是否是該書評的作者 -->
+                        <form action="{{ url_for('crud.delete_review') }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="callnumber" value="{{ review[0] }}">
+                            <input type="hidden" name="description" value="{{ review[2] }}">
+                            <input type="submit" value="刪除" onclick="return confirm('確定要刪除這條書評嗎？');">
+                        </form>
+                        <form action="{{ url_for('crud.edit_review') }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="callnumber" value="{{ review[0] }}">
+                            <input type="hidden" name="description" value="{{ review[2] }}">
+                            <input type="text" name="new_description" placeholder="新書評內容" required>
+                            <input type="number" name="score" min="1" max="5" required placeholder="新評分 (1-5)">
+                            <input type="submit" value="修改">
+                        </form>
+                    {% else %}
+                        <span>無法操作</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">目前沒有書評。</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>撰寫新書評</h2>
+        <form action="{{ url_for('crud.add_review') }}" method="POST">
+            <label for="book_select">選擇一本書:</label>
+            <select id="book_select" name="callnumber" required>
+                {% for book in books %}
+                <option value="{{ book[0] }}">{{ book[1] }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="description">書評內容:</label><br>
+            <textarea id="description" name="description" required></textarea><br>
+
+            <label for="score">評分 (1-5):</label><br>
+            <input type="number" id="score" name="score" min="1" max="5" required><br>
+
+            <input type="submit" value="提交書評">
+        </form>
+
+        <br>
+        <a href="{{ url_for('dashboard') }}">返回儀表板</a>
+    </div>
+</body>
+</html>

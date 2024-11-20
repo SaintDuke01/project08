@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借閱書本次數統計</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 引入 Chart.js -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            padding: 0;
+            list-style-type: none;
+            margin: 20px 0;
+        }
+
+        li {
+            background: #f1f1f1;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        canvas {
+            width: 100%; /* 滿螢幕寬度 */
+            max-width: 800px; /* 最大寬度限制 */
+            height: 400px; /* 固定高度 */
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>借閱書本次數統計</h1>
+
+        <!-- 長條圖 -->
+        <h2>借閱次數前五名（長條圖）：</h2>
+        <canvas id="borrowBarChart"></canvas>
+
+        <!-- 顯示列表 -->
+        <h2>書籍借閱詳細列表：</h2>
+        <ul>
+            {% for review in reviews %}
+                <li>書名: {{ review[1] }} | 借閱次數: {{ review[2] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        // 從模板中獲取數據並轉換為 JavaScript 格式
+        const reviews = JSON.parse('{{ reviews | tojson | safe }}');
+
+        // 根據借閱次數排序並取前五名
+        const topFiveReviews = reviews
+            .sort((a, b) => b[2] - a[2]) // 按借閱次數降序排序
+            .slice(0, 5); // 取前五名
+
+        // 提取書名和借閱次數
+        const labels = topFiveReviews.map(review => review[1]); // 書名
+        const values = topFiveReviews.map(review => review[2]); // 借閱次數
+
+        // 渲染 Chart.js 長條圖
+        const ctx = document.getElementById('borrowBarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels, // X 軸標籤：前五名書名
+                datasets: [{
+                    label: '借閱次數',
+                    data: values, // 借閱次數
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '書名' // X 軸標題
+                        }
+                    },
+                    y: {
+                        beginAtZero: true, // Y 軸從 0 開始
+                        title: {
+                            display: true,
+                            text: '借閱次數' // Y 軸標題
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // 隱藏圖例
+                    },
+                    title: {
+                        display: true,
+                        text: '借閱書本次數前五名'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

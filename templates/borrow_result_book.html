@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>書籍資料</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_1.css') }}">
+    <style>
+        /* 設定表格寬度完全適應螢幕 */
+        table {
+            width: 100%;
+            max-width: 100%; /* 確保表格不會超出螢幕寬度 */
+            border-collapse: collapse; /* 合併邊框 */
+        }
+
+        th, td {
+            text-align: center; /* 文字置中 */
+            padding: 25px; /* 增加單元格內邊距讓表格更大 */
+            border: 1px solid #ddd; /* 設定邊框 */
+            font-size: 30px; /* 增加字體大小 */
+        }
+
+        th {
+            background-color: #f2f2f2; /* 表頭背景顏色 */
+            font-size: 30px; /* 增加表頭字體大小 */
+        }
+
+        /* 設定按鈕樣式 */
+        button {
+            padding: 10px 20px; /* 增加按鈕的大小 */
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 15px; /* 增加按鈕文字大小 */
+        }
+
+        /* 設定頁面整體樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px; /* 增加標題字體大小 */
+        }
+
+        /* 設定表單區域最大寬度和居中 */
+        form {
+            max-width: 800px;  /* 讓表單區域寬度更大 */
+            margin: 0 auto;
+        }
+
+        /* 增加頁面內部邊距 */
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <h1>選擇一本書</h1>
+
+    <form method="POST" action="{{ url_for('crud.view_borrowed_records_specific_book') }}">
+        <label for="book">選擇書籍：</label>
+        <select name="book" id="book">
+            {% for book in records %}
+                <option value="{{ book[0] }}">{{ book[0] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">查詢</button>
+    </form>
+
+</body>
+</html>

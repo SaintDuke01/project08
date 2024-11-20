@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>儀表板</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>歡迎你，{{ current_user.username }}！</h1>  <!-- 顯示登入用戶的電子郵件 -->
+        
+        <h2>選擇功能</h2>
+        <div class="form-container">
+            <a class="button" href="{{ url_for('crud.view_books') }}">查看書籍</a>
+            <a class="button" href="{{ url_for('crud.view_book_reviews') }}">查看書評</a>
+            <a class="button" href="{{ url_for('crud.borrow_log_selection') }}">查看借書還書紀錄</a>
+            <a class="button" href="{{ url_for('crud.book_counts') }}">書本借閱統計</a>
+        </div>
+    </div>
+</body>
+</html>

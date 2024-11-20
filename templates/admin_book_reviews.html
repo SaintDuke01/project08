@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>管理員書評列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .alert {
+            color: red;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>管理員書評列表</h1>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="alert">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <table>
+            <tr>
+                <th>書編號</th>
+                <th>書名</th>
+                <th>書評內容</th>
+                <th>評分</th>
+                <th>寫評人</th>
+                <th>操作</th>
+            </tr>
+            {% for review in reviews %}
+            <tr>
+                <td>{{ review[0] }}</td> 
+                <td>{{ review[1] }}</td> 
+                <td>{{ review[2] }}</td> 
+                <td>{{ review[3] }}</td> 
+                <td>{{ review[4] }}</td> 
+                <td>
+                    <form action="{{ url_for('crud.delete_review') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="callnumber" value="{{ review[0] }}">
+                        <input type="hidden" name="description" value="{{ review[2] }}">
+                        <input type="submit" value="刪除" onclick="return confirm('確定要刪除這條書評嗎？');">
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">目前沒有書評。</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

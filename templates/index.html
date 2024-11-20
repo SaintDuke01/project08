@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>歡迎</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* 總體樣式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff; /* 淺藍色背景 */
+            margin: 0;
+            padding: 0;
+            height: 100vh; /* 讓背景佔滿整個視窗 */
+            display: flex;
+            justify-content: center; /* 垂直居中 */
+            align-items: center; /* 水平居中 */
+        }
+
+        /* 容器樣式 */
+        .container {
+            text-align: center; /* 中間對齊文本 */
+        }
+
+        /* 表單容器樣式 */
+        .form-container {
+            margin-top: 20px;
+        }
+
+        /* 按鈕樣式 */
+        .button {
+            display: inline-block;
+            margin: 10px; /* 增加按鈕之間的間距 */
+            padding: 12px 25px;
+            background-color: #3498db; /* 藍色 */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease; /* 平滑過渡 */
+        }
+
+        /* 按鈕懸停樣式 */
+        .button:hover {
+            background-color: #2980b9; /* 深藍色 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>歡迎使用第八組的書局系統</h1>
+        <div class="form-container">
+            <a class="button" href="{{ url_for('login') }}">登入</a>
+            <a class="button" href="{{ url_for('register') }}">註冊</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>借閱紀錄</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>個人借閱紀錄</h1>
+        <p>您正在查詢的書名為"{{ records[0][0] }}"，作者為"{{ records[0][1] }}"。</p>
+        <table>
+            <tr>
+                <th>借閱時間</th>
+                <th>借閱者</th>
+
+            </tr>
+            {% for record in records %}
+            <tr>
+                <td>{{ record[2] }}</td>
+                <td>{{ record[3] }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">目前沒有借閱紀錄。</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <a class="btn" href="{{ url_for('crud.borrow_log_selection') }}">返回紀錄查詢</a>
+    </div>
+</body>
+</html>
